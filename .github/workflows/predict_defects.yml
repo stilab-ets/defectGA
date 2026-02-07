@@ -1,0 +1,64 @@
+name: Defect Prediction Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  predict-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Calculate Metrics
+      - name: Calculate Code Metrics
+        uses: MahiBegoug/tf-defect-prediction-github-action@main
+        with:
+          output_file: metrics.csv
+
+      # 2. Predict Defects
+      - name: ML Defect Prediction
+        if: success()
+        uses: MahiBegoug/tf-ml-modeling@main
+        with:
+          csv_path: metrics.csv
+          model: randomforest_model
+          s3_bucket: ${{ secrets.S3_BUCKET }}
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+
+      # 3. Check Results
+      - name: Check Results
+        if: success()
+        run: |
+          if [ -f "predictions.csv" ]; then
+            echo "✅ Predictions generated:"
+            cat predictions.csv
+            
+            # Count high risk (Assuming 'fault_prone' column is 1)
+            # Adjust grep based on your CSV structure
+            RISKS=$(grep ",1," predictions.csv | wc -l)
+            if [ "$RISKS" -gt "0" ]; then
+              echo "❌ FAILURE: $RISKS Potential Defects Detected!"
+              # exit 1 # Uncomment to block merge on defects
+            else
+              echo "✅ SUCCESS: No defects predicted."
+            fi
+          else
+            echo "⚠ No predictions generated."
+          fi
+          
+      # 4. Upload Artifact
+      - name: Upload Predictions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: predictions
+          path: predictions.csv
