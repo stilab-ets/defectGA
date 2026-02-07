@@ -56,12 +56,27 @@ jobs:
           aws_region: ${{ secrets.AWS_REGION }}
           threshold: 0.5  # Adjust this value (0.0 - 1.0) to control sensitivity
 
-      # 3. Check Results
+      # 3. Check Results (Optimized with Venv Cache)
+      - name: Cache Python Environment
+        id: cache-venv
+        if: success()
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('.github/scripts/requirements.txt') }}
+
+      - name: Install Dependencies
+        if: success() && steps.cache-venv.outputs.cache-hit != 'true'
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install -r .github/scripts/requirements.txt
+
       - name: Check Results
         if: success()
         run: |
-          # Install dependencies for report script
-          pip install pandas tabulate
+          # Use the cached virtual environment
+          source .venv/bin/activate
           
           echo "📊 Defect Prediction Analysis"
           echo "=================================================="
@@ -75,7 +90,7 @@ jobs:
             fi
 
             # Print readable table of results using external script
-            python .github/scripts/check_predictions.py predictions.csv
+            .venv/bin/python .github/scripts/check_predictions.py predictions.csv
             
           else
             echo "⚠ No predictions generated (or file missing)."
