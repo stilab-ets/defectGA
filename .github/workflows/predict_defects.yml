@@ -18,7 +18,7 @@ jobs:
 
       # 1. Calculate Metrics
       - name: Calculate Code Metrics
-        uses: MahiBegoug/tf-defect-prediction-github-action@main
+        uses: TFDefect/trivial-tf-changes@main
         with:
           output_file: metrics.csv
 
