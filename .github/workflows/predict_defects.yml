@@ -52,7 +52,7 @@ jobs:
           model: logisticreg_model
           s3_bucket: ${{ secrets.S3_BUCKET }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
           threshold: 0.5  # Adjust this value (0.0 - 1.0) to control sensitivity
 
