@@ -14,6 +14,8 @@
       .arrow { stroke: #555; stroke-width: 2.5; marker-end: url(#arrowhead); }
       .arrow-s3 { stroke: #388e3c; stroke-width: 2.5; marker-end: url(#arrowhead-green); stroke-dasharray: 5, 5; }
       .label { font-size: 12px; fill: #666; font-style: italic; }
+      .step-number { fill: #fff; stroke: #1976d2; stroke-width: 2; }
+      .step-text { font-size: 16px; font-weight: bold; fill: #1976d2; }
     </style>
     <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
       <polygon points="0 0, 10 3.5, 0 7" fill="#555" />
@@ -26,7 +28,10 @@
   <!-- Title -->
   <text x="550" y="35" text-anchor="middle" class="title" style="font-size: 22px;">Terraform Defect Prediction Architecture</text>
 
-  <!-- 1. Client Repo -->
+  <!-- Step 1: Client Repo -->
+  <circle cx="70" cy="270" r="18" class="step-number" />
+  <text x="70" y="277" text-anchor="middle" class="step-text">1</text>
+  
   <rect x="50" y="250" width="180" height="120" rx="8" class="box client" />
   <text x="140" y="285" text-anchor="middle" class="title">Client Repo</text>
   <text x="140" y="310" text-anchor="middle" class="text">Push / PR</text>
@@ -35,7 +40,6 @@
 
   <!-- Arrow to Runner -->
   <line x1="230" y1="310" x2="300" y2="310" class="arrow" />
-  <text x="265" y="300" text-anchor="middle" class="label">trigger</text>
 
   <!-- GitHub Actions Runner Container -->
   <rect x="300" y="120" width="520" height="400" rx="12" fill="none" stroke="#999" stroke-dasharray="8,4" stroke-width="2" />
@@ -47,22 +51,31 @@
   <text x="960" y="115" text-anchor="middle" class="title">S3 Bucket</text>
   <text x="960" y="135" text-anchor="middle" class="small-text">tf-metrics-storage</text>
   
-  <!-- 2. Metrics Collector -->
+  <!-- Step 2: Metrics Collector -->
+  <circle cx="350" cy="200" r="18" class="step-number" />
+  <text x="350" y="207" text-anchor="middle" class="step-text">2</text>
+  
   <rect x="330" y="180" width="200" height="100" rx="8" class="box metrics" />
   <text x="430" y="215" text-anchor="middle" class="title">Metrics Collector</text>
   <text x="430" y="240" text-anchor="middle" class="text">JIT Analysis</text>
   <text x="430" y="260" text-anchor="middle" class="small-text">(Process, Similarity,</text>
   <text x="430" y="275" text-anchor="middle" class="small-text">Complexity, Delta)</text>
 
-  <!-- S3 Download History Arrow -->
+  <!-- Step 2a: S3 Download History Arrow -->
+  <circle cx="720" cy="150" r="15" class="step-number" style="fill: #e8f5e9; stroke: #388e3c;" />
+  <text x="720" y="157" text-anchor="middle" class="step-text" style="fill: #388e3c; font-size: 14px;">2a</text>
+  
   <path d="M 900 110 Q 800 110 700 150 L 530 200" class="arrow-s3" fill="none" />
-  <text x="720" y="140" class="label" fill="#388e3c">Download History</text>
+  <text x="720" y="135" class="label" fill="#388e3c">Download History</text>
 
   <!-- Arrow to ML -->
   <line x1="430" y1="280" x2="430" y2="340" class="arrow" />
   <text x="450" y="315" class="label">metrics.csv</text>
 
-  <!-- 3. ML Model -->
+  <!-- Step 3: ML Model -->
+  <circle cx="350" cy="360" r="18" class="step-number" />
+  <text x="350" y="367" text-anchor="middle" class="step-text">3</text>
+  
   <rect x="330" y="340" width="200" height="100" rx="8" class="box ml" />
   <text x="430" y="375" text-anchor="middle" class="title">ML Model</text>
   <text x="430" y="400" text-anchor="middle" class="text">Defect Prediction</text>
@@ -72,25 +85,31 @@
   <line x1="530" y1="390" x2="600" y2="390" class="arrow" />
   <text x="565" y="380" class="label">predictions.csv</text>
 
-  <!-- 4. Alert / Block -->
+  <!-- Step 4: Alert / Block -->
+  <circle cx="620" cy="360" r="18" class="step-number" />
+  <text x="620" y="367" text-anchor="middle" class="step-text">4</text>
+  
   <rect x="600" y="340" width="180" height="100" rx="8" class="alert" />
   <text x="690" y="375" text-anchor="middle" class="title">Alert / Block</text>
   <text x="690" y="400" text-anchor="middle" class="text">PR Comment</text>
   <text x="690" y="420" text-anchor="middle" class="small-text">(If threshold met)</text>
 
-  <!-- S3 Upload Predictions Arrow -->
+  <!-- Step 5: S3 Upload Predictions Arrow -->
+  <circle cx="770" cy="250" r="15" class="step-number" style="fill: #e8f5e9; stroke: #388e3c;" />
+  <text x="770" y="257" text-anchor="middle" class="step-text" style="fill: #388e3c; font-size: 14px;">5</text>
+  
   <path d="M 690 340 Q 690 250 850 150" class="arrow-s3" fill="none" />
-  <text x="770" y="240" class="label" fill="#388e3c">Upload Predictions</text>
-  <text x="770" y="255" class="label" fill="#388e3c">(Versioned)</text>
+  <text x="770" y="230" class="label" fill="#388e3c">Upload Predictions</text>
 
   <!-- Legend -->
-  <rect x="50" y="450" width="250" height="100" rx="5" fill="#fafafa" stroke="#ddd" stroke-width="1.5" />
-  <text x="175" y="475" text-anchor="middle" class="title" style="font-size: 16px;">Data Flow</text>
+  <rect x="50" y="450" width="280" height="100" rx="5" fill="#fafafa" stroke="#ddd" stroke-width="1.5" />
+  <text x="190" y="475" text-anchor="middle" class="title" style="font-size: 16px;">Execution Flow</text>
   
-  <line x1="70" y1="495" x2="120" y2="495" class="arrow" />
-  <text x="130" y="500" class="small-text">Workflow Execution</text>
+  <circle cx="70" cy="495" r="12" class="step-number" />
+  <text x="70" y="500" text-anchor="middle" style="font-size: 12px; font-weight: bold; fill: #1976d2;">N</text>
+  <text x="90" y="500" class="small-text">Step Number</text>
   
-  <line x1="70" y1="520" x2="120" y2="520" class="arrow-s3" />
-  <text x="130" y="525" class="small-text">S3 Storage (Download/Upload)</text>
+  <line x1="70" y1="520" x2="120" y2="520" class="arrow" />
+  <text x="130" y="525" class="small-text">Workflow Execution</text>
 
 </svg>
