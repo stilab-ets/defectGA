@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 600">
+  <!-- Styles -->
+  <defs>
+    <style>
+      .box { fill: #f8f9fa; stroke: #333; stroke-width: 2.5; }
+      .client { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2.5; }
+      .metrics { fill: #fff3e0; stroke: #f57c00; stroke-width: 2.5; }
+      .s3 { fill: #e8f5e9; stroke: #388e3c; stroke-width: 2.5; }
+      .ml { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 2.5; }
+      .alert { fill: #ffebee; stroke: #d32f2f; stroke-width: 2.5; }
+      .text { font-family: 'Segoe UI', sans-serif; font-size: 15px; fill: #333; }
+      .small-text { font-family: 'Segoe UI', sans-serif; font-size: 13px; fill: #555; }
+      .title { font-size: 18px; font-weight: bold; }
+      .arrow { stroke: #555; stroke-width: 2.5; marker-end: url(#arrowhead); }
+      .arrow-s3 { stroke: #388e3c; stroke-width: 2.5; marker-end: url(#arrowhead-green); stroke-dasharray: 5, 5; }
+      .label { font-size: 12px; fill: #666; font-style: italic; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#388e3c" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="550" y="35" text-anchor="middle" class="title" style="font-size: 22px;">Terraform Defect Prediction Architecture</text>
+
+  <!-- 1. Client Repo -->
+  <rect x="50" y="250" width="180" height="120" rx="8" class="box client" />
+  <text x="140" y="285" text-anchor="middle" class="title">Client Repo</text>
+  <text x="140" y="310" text-anchor="middle" class="text">Push / PR</text>
+  <text x="140" y="335" text-anchor="middle" class="small-text">(.tf changes)</text>
+  <text x="140" y="355" text-anchor="middle" class="small-text" style="fill: #1976d2;">Triggers Workflow</text>
+
+  <!-- Arrow to Runner -->
+  <line x1="230" y1="310" x2="300" y2="310" class="arrow" />
+  <text x="265" y="300" text-anchor="middle" class="label">trigger</text>
+
+  <!-- GitHub Actions Runner Container -->
+  <rect x="300" y="120" width="520" height="400" rx="12" fill="none" stroke="#999" stroke-dasharray="8,4" stroke-width="2" />
+  <text x="560" y="145" text-anchor="middle" class="text" style="fill: #777; font-weight: bold;">GitHub Actions Runner</text>
+
+  <!-- S3 Bucket (External, Top) -->
+  <path d="M 900 80 C 900 65 1020 65 1020 80 L 1020 140 C 1020 155 900 155 900 140 Z" class="box s3" />
+  <ellipse cx="960" cy="80" rx="60" ry="15" class="box s3" />
+  <text x="960" y="115" text-anchor="middle" class="title">S3 Bucket</text>
+  <text x="960" y="135" text-anchor="middle" class="small-text">tf-metrics-storage</text>
+  
+  <!-- 2. Metrics Collector -->
+  <rect x="330" y="180" width="200" height="100" rx="8" class="box metrics" />
+  <text x="430" y="215" text-anchor="middle" class="title">Metrics Collector</text>
+  <text x="430" y="240" text-anchor="middle" class="text">JIT Analysis</text>
+  <text x="430" y="260" text-anchor="middle" class="small-text">(Process, Similarity,</text>
+  <text x="430" y="275" text-anchor="middle" class="small-text">Complexity, Delta)</text>
+
+  <!-- S3 Download History Arrow -->
+  <path d="M 900 110 Q 800 110 700 150 L 530 200" class="arrow-s3" fill="none" />
+  <text x="720" y="140" class="label" fill="#388e3c">Download History</text>
+
+  <!-- Arrow to ML -->
+  <line x1="430" y1="280" x2="430" y2="340" class="arrow" />
+  <text x="450" y="315" class="label">metrics.csv</text>
+
+  <!-- 3. ML Model -->
+  <rect x="330" y="340" width="200" height="100" rx="8" class="box ml" />
+  <text x="430" y="375" text-anchor="middle" class="title">ML Model</text>
+  <text x="430" y="400" text-anchor="middle" class="text">Defect Prediction</text>
+  <text x="430" y="420" text-anchor="middle" class="small-text">(Logistic Reg / RF)</text>
+
+  <!-- Arrow to Alert -->
+  <line x1="530" y1="390" x2="600" y2="390" class="arrow" />
+  <text x="565" y="380" class="label">predictions.csv</text>
+
+  <!-- 4. Alert / Block -->
+  <rect x="600" y="340" width="180" height="100" rx="8" class="alert" />
+  <text x="690" y="375" text-anchor="middle" class="title">Alert / Block</text>
+  <text x="690" y="400" text-anchor="middle" class="text">PR Comment</text>
+  <text x="690" y="420" text-anchor="middle" class="small-text">(If threshold met)</text>
+
+  <!-- S3 Upload Predictions Arrow -->
+  <path d="M 690 340 Q 690 250 850 150" class="arrow-s3" fill="none" />
+  <text x="770" y="240" class="label" fill="#388e3c">Upload Predictions</text>
+  <text x="770" y="255" class="label" fill="#388e3c">(Versioned)</text>
+
+  <!-- Legend -->
+  <rect x="50" y="450" width="250" height="100" rx="5" fill="#fafafa" stroke="#ddd" stroke-width="1.5" />
+  <text x="175" y="475" text-anchor="middle" class="title" style="font-size: 16px;">Data Flow</text>
+  
+  <line x1="70" y1="495" x2="120" y2="495" class="arrow" />
+  <text x="130" y="500" class="small-text">Workflow Execution</text>
+  
+  <line x1="70" y1="520" x2="120" y2="520" class="arrow-s3" />
+  <text x="130" y="525" class="small-text">S3 Storage (Download/Upload)</text>
+
+</svg>

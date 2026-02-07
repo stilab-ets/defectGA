@@ -21,7 +21,32 @@ The pipeline consists of three main components:
 2.  **Metrics Collector** (`stilab-ets/tf-metrics-collector`): Analyzes code changes and extracts software metrics.
 3.  **ML Model** (`stilab-ets/tf-ml-defect-model`): Uses a pre-trained machine learning model to predict if changed blocks are defect-prone.
 
-![Architecture Diagram](docs/architecture.svg)
+<div align="right">
+  <img src="docs/architecture.svg" alt="Architecture Diagram" width="700">
+</div>
+
+## 🗄️ S3 Artifact Storage
+
+The pipeline automatically manages artifacts in your configured **S3 Bucket** (`tf-metrics-storage`). This ensures data persistence and model versioning.
+
+```
+s3://tf-metrics-storage/
+├── history/
+│   └── prediction_history_master.csv    # Accumulated global history
+├── metrics/
+│   ├── metrics_current.csv              # Latest JIT metrics
+│   └── metrics_history.csv              # Historical metrics context
+├── predictions/
+│   └── predictions_<COMMIT>_<TIME>.csv  # Prediction results (Versioned)
+└── pre_trained_defect_models/           # ML Models
+    ├── trained_models/
+    │   └── logisticreg_model.joblib
+    └── model_features/
+```
+
+**Key Features:**
+*   **Automatic Versioning**: Every prediction run saves a file with the Commit Hash and Timestamp.
+*   **Model Management**: Models are downloaded dynamically from `pre_trained_defect_models`.
 
 ## ⚡ How It Works (Just-In-Time)
 
