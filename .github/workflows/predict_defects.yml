@@ -22,11 +22,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      # 0. Setup AWS (Required to download history)
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 0.5 Download History (If it exists)
+      - name: Download Historical Metrics
+        run: |
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/metrics_history.csv metrics_history.csv || echo "No history found, starting fresh."
+
       # 1. Calculate Metrics
       - name: Calculate Code Metrics
         uses: TFDefect/trivial-tf-changes@main
         with:
           output_file: metrics.csv
+          commit_hash: ${{ github.sha }}
+          history_file: metrics_history.csv
 
       # 2. Predict Defects
       - name: ML Defect Prediction
@@ -37,8 +52,9 @@ jobs:
           model: logisticreg_model
           s3_bucket: ${{ secrets.S3_BUCKET }}
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
+          threshold: 0.5  # Adjust this value (0.0 - 1.0) to control sensitivity
 
       # 3. Check Results
       - name: Check Results
