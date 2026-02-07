@@ -9,7 +9,6 @@ terraform {
 
 provider "google" {
   credentials = file(var.keyfile_location)
-  region      = var.region
 }
 
 module "kubernetes" {
