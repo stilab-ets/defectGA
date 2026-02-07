@@ -60,6 +60,9 @@ jobs:
       - name: Check Results
         if: success()
         run: |
+          # Install dependencies for report script
+          pip install pandas tabulate
+          
           echo "📊 Defect Prediction Analysis"
           echo "=================================================="
           
