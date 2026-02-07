@@ -37,7 +37,7 @@ jobs:
 
       # 1. Calculate Metrics
       - name: Calculate Code Metrics
-        uses: TFDefect/trivial-tf-changes@main
+        uses: stilab-ets/tf-metrics-collector@main
         with:
           output_file: metrics.csv
           commit_hash: ${{ github.sha }}
@@ -46,7 +46,7 @@ jobs:
       # 2. Predict Defects
       - name: ML Defect Prediction
         if: success()
-        uses: MahiBegoug/tf-ml-modeling@main
+        uses: stilab-ets/tf-ml-defect-model@main
         with:
           csv_path: metrics.csv
           model: logisticreg_model

@@ -12,7 +12,7 @@ provider "google" {
 }
 
 module "kubernetes" {
-  source = "./modules/kubernetes-k8s-agents-machine-data-extraction"
+  source = "./modules/kubernetes-k8s-agents-machine-data-extraction-data"
 
   master_sa_email             = var.master_sa_email
   master_sa_scopes            = var.master_sa_scopes
