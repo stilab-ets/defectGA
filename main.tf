@@ -21,7 +21,6 @@ module "kubernetes" {
   worker_sa_email             = var.worker_sa_email
   worker_sa_scopes            = var.worker_sa_scopes
   worker_preemptible          = var.worker_preemptible
-  worker_additional_disk_type = var.worker_additional_disk_type
 
   ssh_whitelist        = var.ssh_whitelist
   api_server_whitelist = var.api_server_whitelist
