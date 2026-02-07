@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file(var.keyfile_location)
+  credentials = var.keyfile_location
 }
 
 module "kubernetes" {
