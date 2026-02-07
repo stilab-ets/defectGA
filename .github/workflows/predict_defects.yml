@@ -60,21 +60,22 @@ jobs:
       - name: Check Results
         if: success()
         run: |
+          echo "📊 Defect Prediction Analysis"
+          echo "=================================================="
+          
           if [ -f "predictions.csv" ]; then
-            echo "✅ Predictions generated:"
-            cat predictions.csv
-            
-            # Count high risk (Assuming 'fault_prone' column is 1)
-            # Adjust grep based on your CSV structure
-            RISKS=$(grep ",1," predictions.csv | wc -l)
-            if [ "$RISKS" -gt "0" ]; then
-              echo "❌ FAILURE: $RISKS Potential Defects Detected!"
-              # exit 1 # Uncomment to block merge on defects
-            else
-              echo "✅ SUCCESS: No defects predicted."
+            # Check if file has data (more than just header)
+            ROW_COUNT=$(wc -l < predictions.csv)
+            if [ "$ROW_COUNT" -le 1 ]; then
+               echo "ℹ️ No modified Terraform blocks found to analyze."
+               exit 0
             fi
+
+            # Print readable table of results using external script
+            python .github/scripts/check_predictions.py predictions.csv
+            
           else
-            echo "⚠ No predictions generated."
+            echo "⚠ No predictions generated (or file missing)."
           fi
           
       # 4. Upload Artifact
